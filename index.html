@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdant Woods — Premium Plywood & Veneers</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --cream: #f7f1e7;
+    --cream-2: #efe6d4;
+    --walnut: #3d2817;
+    --walnut-light: #5c3d24;
+    --amber: #c8821e;
+    --amber-soft: #e8b25e;
+    --moss: #4a5d3a;
+    --espresso: #1a1108;
+    --paper: #fbf7f0;
+  }
+  * { -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--espresso);
+    overflow-x: hidden;
+  }
+  .font-display { font-family: 'Fraunces', serif; font-optical-sizing: auto; }
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none; opacity: 0.5;
+    mix-blend-mode: multiply; z-index: 1000;
+  }
+  .view { transition: opacity 0.4s ease; }
+  .view.hidden-view { display: none; }
+  /* Marquee */
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .marquee-track { animation: marquee 45s linear infinite; display: inline-flex; }
+  /* Hero animations */
+  @keyframes float-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .anim-up { animation: float-up 1s ease both; }
+  .anim-up-2 { animation: float-up 1s ease 0.15s both; }
+  .anim-up-3 { animation: float-up 1s ease 0.3s both; }
+  /* Product card */
+  .product-card { transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer; }
+  .product-card:hover { transform: translateY(-6px); }
+  .product-card .img-wrap { overflow: hidden; position: relative; }
+  .product-card .img-wrap img { transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .product-card:hover .img-wrap img { transform: scale(1.08); }
+  .product-card:hover .card-arrow { transform: translateX(4px); }
+  .card-arrow { transition: transform 0.4s ease; }
+  /* Thumbnails */
+  .thumb { transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; }
+  .thumb.active { border-color: var(--amber); }
+  .thumb:hover { opacity: 0.92; }
+  /* Kitchen hotspot */
+  .kitchen-hotspot {
+    position: absolute; width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(200, 130, 30, 0.95); border: 2px solid white;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    animation: pulse 2.5s infinite; z-index: 5;
+  }
+  .kitchen-hotspot:hover .hotspot-tip { opacity: 1; transform: translate(-50%, -8px); }
+  .hotspot-tip {
+    position: absolute; bottom: 100%; left: 50%; transform: translate(-50%, 0);
+    background: var(--espresso); color: var(--cream);
+    padding: 8px 14px; border-radius: 6px; font-size: 11px; white-space: nowrap;
+    opacity: 0; transition: all 0.3s ease; pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3); font-weight: 500;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.3), 0 0 0 0 rgba(200, 130, 30, 0.6); }
+    50% { box-shadow: 0 4px 14px rgba(0,0,0,0.3), 0 0 0 12px rgba(200, 130, 30, 0); }
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--cream-2); }
+  ::-webkit-scrollbar-thumb { background: var(--walnut-light); border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--walnut); }
+  html { scroll-behavior: smooth; }
+  .btn-primary {
+    background: var(--walnut); color: var(--cream);
+    transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-primary:hover {
+    background: var(--espresso); transform: translateY(-2px);
+    box-shadow: 0 14px 28px -10px rgba(26,17,8,0.5);
+  }
+  .ornament {
+    display: inline-flex; align-items: center; gap: 14px;
+    color: var(--amber); font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .ornament-line { width: 36px; height: 1px; background: currentColor; opacity: 0.6; }
+  .hero-bg {
+    background:
+      linear-gradient(135deg, rgba(26,17,8,0.55) 0%, rgba(61,40,23,0.25) 50%, transparent 100%),
+      url('https://images.unsplash.com/photo-1604537529428-15bcbe5c8e97?w=1600&q=80') center/cover;
+  }
+  .wood-pattern {
+    background-color: var(--walnut);
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 4px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 22px);
+  }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .spec-row {
+    border-bottom: 1px solid rgba(61, 40, 23, 0.12);
+    padding: 13px 0; display: flex; justify-content: space-between; align-items: center;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .cart-count {
+    background: var(--amber); color: white; font-size: 10px; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    position: absolute; top: -6px; right: -6px;
+  }
+  .nav-link { position: relative; transition: color 0.3s ease; }
+  .nav-link::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1.5px; background: var(--amber); transition: width 0.3s ease;
+  }
+  .nav-link:hover::after { width: 100%; }
+  .badge {
+    background: var(--amber-soft); color: var(--walnut);
+    padding: 4px 10px; border-radius: 20px; font-size: 10px;
+    font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--espresso); color: var(--cream);
+    padding: 14px 22px; border-radius: 8px; border-left: 3px solid var(--amber);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+    transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 2000; display: flex; align-items: center; gap: 10px; font-size: 14px;
+  }
+  .toast.show { transform: translateX(0); }
+  .main-img-wrap { position: relative; }
+  .main-img-wrap img { transition: opacity 0.3s ease; }
+</style>
+</head>
+<body>
+
+<!-- Announcement Bar -->
+<div class="bg-[#1a1108] text-[#f7f1e7] text-[11px] py-2 overflow-hidden relative z-30">
+  <div class="marquee-track">
+    <div class="flex items-center gap-12 px-6 whitespace-nowrap">
+      <span><i class="fa-solid fa-truck-fast mr-2 text-[#e8b25e]"></i> Free delivery on orders above ₹25,000</span>
+      <span class="text-[#e8b25e]">•</span>
+      <span><i class="fa-solid fa-award mr-2 text-[#e8b25e]"></i> ISI certified · 25-year warranty</span>
+      <span class="text-[#e8b25e]">•</span>
+      <span><i class="fa-solid fa-leaf mr-2 text-[#e8b25e]"></i> Sustainably harvested timber</span>
+      <span class="text-[#e8b25e]">•</span>
+      <span><i class="fa-solid fa-hammer mr-2 text-[#e8b25e]"></i> Custom cut-to-size available</span>
+    </div>
+    <div class="flex items-center gap-12 px-6 whitespace-nowrap" aria-hidden="true">
+      <span><i class="fa-solid fa-truck-fast mr-2 text-[#e8b25e]"></i> Free delivery on orders above ₹25,000</span>
+      <span class="text-[#e8b25e]">•</span>
+      <span><i class="fa-solid fa-award mr-2 text-[#e8b25e]"></i> ISI certified · 25-year warranty</span>
+      <span class="text-[#e8b25e]">•</span>
+      <span><i class="fa-solid fa-leaf mr-2 text-[#e8b25e]"></i> Sustainably harvested timber</span>
+      <span class="text-[#e8b25e]">•</span>
+      <span><i class="fa-solid fa-hammer mr-2 text-[#e8b25e]"></i> Custom cut-to-size available</span>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="sticky top-0 z-40 bg-[#f7f1e7]/92 backdrop-blur-md border-b border-[#3d2817]/10">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3" onclick="goHome(event)">
+      <div class="w-10 h-10 rounded-full bg-[#3d2817] flex items-center justify-center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M3 8L12 3L21 8M3 8V16L12 21M3 8L12 13M21 8V16L12 21M21 8L12 13M12 21V13" stroke="#e8b25e" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="font-display font-bold text-xl text-[#3d2817] leading-none">Verdant Woods</div>
+        <div class="text-[10px] tracking-[0.25em] text-[#5c3d24] uppercase mt-1">Plywood · Veneer · Surfaces</div>
+      </div>
+    </a>
+    <ul class="hidden lg:flex items-center gap-9 text-sm font-medium text-[#3d2817]">
+      <li><a href="#collections" class="nav-link">Collections</a></li>
+      <li><a href="#story" class="nav-link">Our Craft</a></li>
+      <li><a href="#process" class="nav-link">Process</a></li>
+      <li><a href="#testimonials" class="nav-link">Stories</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="flex items-center gap-2">
+      <button class="w-10 h-10 rounded-full hover:bg-[#efe6d4] flex items-center justify-center text-[#3d2817] transition" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+      </button>
+      <button class="w-10 h-10 rounded-full hover:bg-[#efe6d4] flex items-center justify-center text-[#3d2817] transition" aria-label="Account">
+        <i class="fa-regular fa-user text-sm"></i>
+      </button>
+      <button class="relative w-10 h-10 rounded-full hover:bg-[#efe6d4] flex items-center justify-center text-[#3d2817] transition" aria-label="Cart">
+        <i class="fa-solid fa-bag-shopping text-sm"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HOME VIEW -->
+<main id="home-view" class="view">
+
+<!-- Hero -->
+<section class="relative min-h-[88vh] flex items-end overflow-hidden">
+  <div class="absolute inset-0 hero-bg"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-[#1a1108]/85 via-[#1a1108]/25 to-transparent"></div>
+  <div class="relative max-w-7xl mx-auto px-6 pb-20 pt-32 w-full">
+    <div class="max-w-3xl">
+      <div class="ornament mb-7 anim-up text-[#e8b25e]">
+        <span class="ornament-line"></span>
+        Est. 1974 · Three Generations of Craft
+      </div>
+      <h1 class="font-display font-extrabold text-5xl md:text-7xl lg:text-[88px] leading-[0.95] text-[#f7f1e7] anim-up">
+        Surfaces that <em class="text-[#e8b25e] font-normal italic">age like</em><br>
+        good architecture.
+      </h1>
+      <p class="mt-7 text-lg text-[#f7f1e7]/85 max-w-xl leading-relaxed anim-up-2">
+        Precision-engineered plywood, veneers and laminates — kiln-dried, calibrated and bonded for a lifetime of interior beauty. Built for kitchens that host, wardrobes that endure, walls that whisper.
+      </p>
+      <div class="mt-9 flex flex-wrap items-center gap-4 anim-up-3">
+        <a href="#collections" class="btn-primary px-7 py-4 rounded-full text-sm font-semibold tracking-wide">
+          Explore Collections <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+        <a href="#story" class="px-7 py-4 rounded-full text-sm font-semibold tracking-wide border border-[#f7f1e7]/40 text-[#f7f1e7] hover:bg-[#f7f1e7] hover:text-[#1a1108] transition inline-flex items-center gap-2">
+          Watch Our Craft <i class="fa-regular fa-circle-play"></i>
+        </a>
+      </div>
+    </div>
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl">
+      <div class="border-t border-[#f7f1e7]/30 pt-4 text-[#f7f1e7]">
+        <div class="font-display text-3xl font-bold">50<span class="text-[#e8b25e]">+</span></div>
+        <div class="text-[11px] tracking-[0.15em] uppercase opacity-70 mt-1">Years of Mastery</div>
+      </div>
+      <div class="border-t border-[#f7f1e7]/30 pt-4 text-[#f7f1e7]">
+        <div class="font-display text-3xl font-bold">28</div>
+        <div class="text-[11px] tracking-[0.15em] uppercase opacity-70 mt-1">Specialty Grades</div>
+      </div>
+      <div class="border-t border-[#f7f1e7]/30 pt-4 text-[#f7f1e7]">
+        <div class="font-display text-3xl font-bold">1.2M<span class="text-[#e8b25e]">+</span></div>
+        <div class="text-[11px] tracking-[0.15em] uppercase opacity-70 mt-1">Sheets Delivered</div>
+      </div>
+      <div class="border-t border-[#f7f1e7]/30 pt-4 text-[#f7f1e7]">
+        <div class="font-display text-3xl font-bold">25<span class="text-[#e8b25e]">y</span></div>
+        <div class="text-[11px] tracking-[0.15em] uppercase opacity-70 mt-1">Structural Warranty</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Collections -->
+<section id="collections" class="py-24 bg-[#f7f1e7]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+      <div class="reveal">
+        <div class="ornament mb-5"><span class="ornament-line"></span>The Collection</div>
+        <h2 class="font-display font-bold text-4xl md:text-6xl text-[#3d2817] leading-tight">
+          Plywood, <em class="italic text-[#c8821e] font-normal">considered.</em>
+        </h2>
+      </div>
+      <p class="md:max-w-sm text-[#5c3d24] text-sm leading-relaxed reveal">
+        Six families of engineered wood, each calibrated for a specific use — from marine-grade panels that shrug off the monsoon to veneers that imitate nothing.
+      </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7" id="products-grid"></div>
+    <div class="mt-14 text-center reveal">
+      <a href="#" class="btn-outline inline-flex px-8 py-4 rounded-full text-sm font-semibold border-[1.5px] border-[#3d2817] text-[#3d2817] hover:bg-[#3d2817] hover:text-[#f7f1e7] transition items-center gap-2">
+        View Full Catalogue <i class="fa-solid fa-arrow-right text-xs"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Story Section -->
+<section id="story" class="py-24 bg-[#efe6d4] relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="reveal">
+        <div class="ornament mb-6"><span class="ornament-line"></span>Our Craft</div>
+        <h2 class="font-display font-bold text-4xl md:text-5xl text-[#3d2817] leading-tight mb-6">
+          We peel, we dry, we press — <em class="italic text-[#c8821e]">slowly.</em>
+        </h2>
+        <p class="text-[#5c3d24] leading-relaxed mb-6">
+          Each log is hand-selected from FSC-certified plantations, peeled into continuous veneers, then kiln-dried to a moisture content of 8±2%. The plies are layered cross-grain, glued with melamine-fortified resins, and pressed at 140°C under 18 kg/cm².
+        </p>
+        <p class="text-[#5c3d24] leading-relaxed mb-8">
+          The result? Panels that don't bow, delaminate or warp — even after decades of tropical humidity. We test every batch in our in-house lab before it ever leaves the yard.
+        </p>
+        <div class="grid grid-cols-2 gap-6">
+          <div><div class="font-display text-3xl font-bold text-[#c8821e]">8%</div><div class="text-xs uppercase tracking-wider text-[#5c3d24] mt-1">Target Moisture</div></div>
+          <div><div class="font-display text-3xl font-bold text-[#c8821e]">18kg/cm²</div><div class="text-xs uppercase tracking-wider text-[#5c3d24] mt-1">Press Pressure</div></div>
+          <div><div class="font-display text-3xl font-bold text-[#c8821e]">140°</div><div class="text-xs uppercase tracking-wider text-[#5c3d24] mt-1">Hot Press Temp</div></div>
+          <div><div class="font-display text-3xl font-bold text-[#c8821e]">12</div><div class="text-xs uppercase tracking-wider text-[#5c3d24] mt-1">QC Checkpoints</div></div>
+        </div>
+      </div>
+      <div class="relative reveal">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1585251292312-611b9d53a7b1?w=900&q=80" alt="Plywood manufacturing" class="rounded-2xl shadow-2xl w-full" onerror="this.onerror=null;this.src='https://picsum.photos/seed/plywood-mfg/900/700'">
+          <div class="absolute -bottom-6 -left-6 w-40 h-40 rounded-2xl overflow-hidden border-4 border-[#efe6d4] hidden md:block">
+            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=400&q=80" alt="Wood detail" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/seed/wood2/400/400'">
+          </div>
+          <div class="absolute -top-5 -right-5 bg-[#3d2817] text-[#f7f1e7] px-6 py-4 rounded-2xl shadow-xl hidden md:block">
+            <div class="font-display text-2xl font-bold">ISI 710</div>
+            <div class="text-[10px] uppercase tracking-wider text-[#e8b25e] mt-1">Marine Grade</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Steps -->
+<section id="process" class="py-24 wood-pattern text-[#f7f1e7]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <div class="ornament mb-5 justify-center">
+        <span class="ornament-line"></span>From Log to Living Room<span class="ornament-line"></span>
+      </div>
+      <h2 class="font-display font-bold text-4xl md:text-5xl leading-tight">
+        Four stages. <em class="italic text-[#e8b25e]">No shortcuts.</em>
+      </h2>
+    </div>
+    <div class="grid md:grid-cols-4 gap-6">
+      <div class="reveal bg-[#1a1108]/40 backdrop-blur rounded-2xl p-7 border border-[#e8b25e]/15 hover:border-[#e8b25e]/50 transition">
+        <div class="font-display text-5xl text-[#e8b25e] font-bold mb-4">01</div>
+        <h3 class="font-display text-xl font-semibold mb-2">Select &amp; Peel</h3>
+        <p class="text-sm text-[#f7f1e7]/70 leading-relaxed">FSC hardwood logs are debarked, soaked, then rotary-peeled into continuous veneer leaves 1.2mm thin.</p>
+      </div>
+      <div class="reveal bg-[#1a1108]/40 backdrop-blur rounded-2xl p-7 border border-[#e8b25e]/15 hover:border-[#e8b25e]/50 transition">
+        <div class="font-display text-5xl text-[#e8b25e] font-bold mb-4">02</div>
+        <h3 class="font-display text-xl font-semibold mb-2">Kiln Dry</h3>
+        <p class="text-sm text-[#f7f1e7]/70 leading-relaxed">Veneers are conditioned to 8% moisture in temperature-controlled kilns — preventing every future warp.</p>
+      </div>
+      <div class="reveal bg-[#1a1108]/40 backdrop-blur rounded-2xl p-7 border border-[#e8b25e]/15 hover:border-[#e8b25e]/50 transition">
+        <div class="font-display text-5xl text-[#e8b25e] font-bold mb-4">03</div>
+        <h3 class="font-display text-xl font-semibold mb-2">Layer &amp; Glue</h3>
+        <p class="text-sm text-[#f7f1e7]/70 leading-relaxed">Cross-grain assembly with phenol-formaldehyde resin — bonds stronger than the wood itself.</p>
+      </div>
+      <div class="reveal bg-[#1a1108]/40 backdrop-blur rounded-2xl p-7 border border-[#e8b25e]/15 hover:border-[#e8b25e]/50 transition">
+        <div class="font-display text-5xl text-[#e8b25e] font-bold mb-4">04</div>
+        <h3 class="font-display text-xl font-semibold mb-2">Press &amp; Calibrate</h3>
+        <p class="text-sm text-[#f7f1e7]/70 leading-relaxed">Hot-pressed under 18kg/cm², then sanded to a uniform ±0.2mm tolerance. Ready for your craft.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" class="py-24 bg-[#f7f1e7]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="reveal mb-14 max-w-2xl">
+      <div class="ornament mb-5"><span class="ornament-line"></span>From the Worksite</div>
+      <h2 class="font-display font-bold text-4xl md:text-5xl text-[#3d2817] leading-tight">
+        Trusted by architects<br>who <em class="italic text-[#c8821e]">don't compromise.</em>
+      </h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-7">
+      <div class="reveal bg-white p-8 rounded-2xl border border-[#3d2817]/8 shadow-sm">
+        <div class="flex gap-1 text-[#c8821e] mb-5"><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i></div>
+        <p class="text-[#3d2817] leading-relaxed mb-7">"After two monsoons, my kitchen cabinets show zero swelling. The Marine BWP sheets are in a different league — worth every rupee."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-[#c8821e]/20 flex items-center justify-center font-display font-bold text-[#c8821e]">RK</div>
+          <div><div class="font-semibold text-sm text-[#3d2817]">Rohan Karkera</div><div class="text-xs text-[#5c3d24]">Architect, Mumbai</div></div>
+        </div>
+      </div>
+      <div class="reveal bg-white p-8 rounded-2xl border border-[#3d2817]/8 shadow-sm">
+        <div class="flex gap-1 text-[#c8821e] mb-5"><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i></div>
+        <p class="text-[#3d2817] leading-relaxed mb-7">"The decorative veneer selection is unmatched. We've used Verdant on three hospitality projects — never a complaint about finish or stability."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-[#c8821e]/20 flex items-center justify-center font-display font-bold text-[#c8821e]">AM</div>
+          <div><div class="font-semibold text-sm text-[#3d2817]">Ananya Mehta</div><div class="text-xs text-[#5c3d24]">Interior Designer, Bengaluru</div></div>
+        </div>
+      </div>
+      <div class="reveal bg-white p-8 rounded-2xl border border-[#3d2817]/8 shadow-sm">
+        <div class="flex gap-1 text-[#c8821e] mb-5"><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i><i class="fa-solid fa-star text-xs"></i></div>
+        <p class="text-[#3d2817] leading-relaxed mb-7">"Cut-to-size accuracy is within 1mm on every sheet. Saves us hours on site. The team's technical knowledge is exceptional."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-[#c8821e]/20 flex items-center justify-center font-display font-bold text-[#c8821e]">JS</div>
+          <div><div class="font-semibold text-sm text-[#3d2817]">Jaspreet Singh</div><div class="text-xs text-[#5c3d24]">Contractor, Delhi NCR</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="py-24 bg-[#3d2817] text-[#f7f1e7] relative overflow-hidden">
+  <div class="absolute inset-0 opacity-15" style="background: url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1600&q=80') center/cover;"></div>
+  <div class="relative max-w-5xl mx-auto px-6 text-center reveal">
+    <div class="ornament mb-6 justify-center text-[#e8b25e]">
+      <span class="ornament-line"></span>Begin Your Project<span class="ornament-line"></span>
+    </div>
+    <h2 class="font-display font-bold text-4xl md:text-6xl leading-tight mb-6">
+      Send us your floor plan.<br>We'll send back a <em class="italic text-[#e8b25e]">cut list.</em>
+    </h2>
+    <p class="text-[#f7f1e7]/80 max-w-xl mx-auto mb-9 leading-relaxed">
+      Free consultation, panel-by-panel estimation and on-time delivery. Our team responds within 24 hours.
+    </p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="#" class="px-8 py-4 rounded-full text-sm font-semibold bg-[#c8821e] hover:bg-[#e8b25e] transition inline-flex items-center gap-2 text-[#1a1108]">
+        Request a Quote <i class="fa-solid fa-arrow-right text-xs"></i>
+      </a>
+      <a href="#" class="px-8 py-4 rounded-full text-sm font-semibold border border-[#f7f1e7]/30 hover:bg-[#f7f1e7] hover:text-[#3d2817] transition inline-flex items-center gap-2">
+        <i class="fa-solid fa-phone"></i> +91 98700 11122
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- INVENTORY VIEW -->
+<main id="inventory-view" class="view hidden-view bg-[#f7f1e7] min-h-screen"></main>
+
+<!-- Footer -->
+<footer class="bg-[#1a1108] text-[#f7f1e7]/70 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-5 gap-10 mb-12">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-full bg-[#3d2817] flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M3 8L12 3L21 8M3 8V16L12 21M3 8L12 13M21 8V16L12 21M21 8L12 13M12 21V13" stroke="#e8b25e" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="font-display font-bold text-xl text-[#f7f1e7]">Verdant Woods</div>
+        </div>
+        <p class="text-sm leading-relaxed max-w-sm">Three generations of plywood craft. From our yard in Coimbatore to interiors across India — engineered to outlast trends.</p>
+        <div class="flex gap-3 mt-6">
+          <a href="#" class="w-9 h-9 rounded-full bg-[#3d2817] hover:bg-[#c8821e] hover:text-[#1a1108] transition flex items-center justify-center"><i class="fa-brands fa-instagram text-sm"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full bg-[#3d2817] hover:bg-[#c8821e] hover:text-[#1a1108] transition flex items-center justify-center"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full bg-[#3d2817] hover:bg-[#c8821e] hover:text-[#1a1108] transition flex items-center justify-center"><i class="fa-brands fa-pinterest-p text-sm"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full bg-[#3d2817] hover:bg-[#c8821e] hover:text-[#1a1108] transition flex items-center justify-center"><i class="fa-brands fa-youtube text-sm"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="text-[#e8b25e] text-xs uppercase tracking-wider font-semibold mb-4">Products</div>
+        <ul class="space-y-3 text-sm">
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Marine Plywood</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">BWR / BWP Grade</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Commercial MR</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Decorative Veneers</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Pre-Laminated MDF</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-[#e8b25e] text-xs uppercase tracking-wider font-semibold mb-4">Company</div>
+        <ul class="space-y-3 text-sm">
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Our Story</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Manufacturing</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Sustainability</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Certifications</a></li>
+          <li><a href="#" class="hover:text-[#e8b25e] transition">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-[#e8b25e] text-xs uppercase tracking-wider font-semibold mb-4">Visit Us</div>
+        <ul class="space-y-3 text-sm">
+          <li>Survey No. 47, Pollachi Rd,<br>Coimbatore, TN 641021</li>
+          <li><a href="tel:+919870011122" class="hover:text-[#e8b25e] transition">+91 98700 11122</a></li>
+          <li><a href="mailto:hello@verdantwoods.in" class="hover:text-[#e8b25e] transition">hello@verdantwoods.in</a></li>
+          <li class="text-[#f7f1e7]/50 text-xs mt-4">Mon–Sat · 9am to 7pm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-[#3d2817] pt-7 flex flex-col md:flex-row justify-between gap-4 text-xs">
+      <div>© 2024 Verdant Woods Pvt Ltd. All rights reserved.</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-[#e8b25e] transition">Privacy</a>
+        <a href="#" class="hover:text-[#e8b25e] transition">Terms</a>
+        <a href="#" class="hover:text-[#e8b25e] transition">Warranty</a>
+        <a href="#" class="hover:text-[#e8b25e] transition">Returns</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <i class="fa-solid fa-check-circle text-[#e8b25e]"></i>
+  <span id="toast-text">Added to cart</span>
+</div>
+
+<script>
+  // ============ Product Data ============
+  // NOTE: In next step, admin module will push/edit these products via localStorage
+  const defaultProducts = [
+    {
+      id: 'marine-bwp',
+      name: 'Marine BWP Plywood',
+      tagline: 'Boiling-water proof · 710 grade',
+      price: 420,
+      badge: 'Best Seller',
+      grade: 'ISI 710',
+      image: 'https://images.unsplash.com/photo-1604537529428-15bcbe5c8e97?w=800&q=80',
+      gallery: [
+        'https://images.unsplash.com/photo-1604537529428-15bcbe5c8e97?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604176352427-9e8c3a3a5b85?w=1000&q=80',
+        'https://images.unsplash.com/photo-1503602642458-232111445657?w=1000&q=80',
+        'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1000&q=80'
+      ],
+      galleryLabels: ['Face Veneer', 'Edge Profile', 'Cross-Section', 'Sheet Stack'],
+      kitchenImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80',
+      kitchenApps: ['Cabinet shutters', 'Sink base unit', 'Wet-area partition'],
+      spec: { thickness: '6, 9, 12, 16, 19 mm', grade: 'ISI 710 BWP', glue: 'Phenol Formaldehyde', warranty: '25 years', moisture: '8% ± 2%' }
+    },
+    {
+      id: 'bwr-grade',
+      name: 'BWR Grade Plywood',
+      tagline: 'Boiling-water resistant · 303 grade',
+      price: 280,
+      grade: 'ISI 303',
+      image: 'https://images.unsplash.com/photo-1604176352427-9e8c3a3a5b85?w=800&q=80',
+      gallery: [
+        'https://images.unsplash.com/photo-1604176352427-9e8c3a3a5b85?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604537529428-15bcbe5c8e97?w=1000&q=80',
+        'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1000&q=80',
+        'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1000&q=80'
+      ],
+      galleryLabels: ['Face Veneer', 'Surface Grain', 'Edge Detail', 'Stack View'],
+      kitchenImage: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1600&q=80',
+      kitchenApps: ['Wall cabinets', 'Pantry units', 'Tall storage'],
+      spec: { thickness: '6, 9, 12, 18 mm', grade: 'ISI 303 BWR', glue: 'Melamine Urea', warranty: '15 years', moisture: '10% ± 2%' }
+    },
+    {
+      id: 'commercial-mr',
+      name: 'Commercial MR Ply',
+      tagline: 'Moisture resistant · interior grade',
+      price: 180,
+      grade: 'ISI 303',
+      image: 'https://images.unsplash.com/photo-1503602642458-232111445657?w=800&q=80',
+      gallery: [
+        'https://images.unsplash.com/photo-1503602642458-232111445657?w=1000&q=80',
+        'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604176352427-9e8c3a3a5b85?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604537529428-15bcbe5c8e97?w=1000&q=80'
+      ],
+      galleryLabels: ['Surface', 'Texture Close-up', 'Edge Detail', 'Storage Stack'],
+      kitchenImage: 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1600&q=80',
+      kitchenApps: ['Dry-area cabinets', 'Loft shutters', 'Partition walls'],
+      spec: { thickness: '6, 9, 12, 19 mm', grade: 'ISI 303 MR', glue: 'Urea Formaldehyde', warranty: '8 years', moisture: '12% ± 2%' }
+    },
+    {
+      id: 'decorative-veneer',
+      name: 'Natural Teak Veneer',
+      tagline: 'A-grade decorative face veneer',
+      price: 650,
+      badge: 'Premium',
+      grade: 'A-Grade Face',
+      image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
+      gallery: [
+        'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1000&q=80',
+        'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604176352427-9e8c3a3a5b85?w=1000&q=80',
+        'https://images.unsplash.com/photo-1503602642458-232111445657?w=1000&q=80'
+      ],
+      galleryLabels: ['Veneer Face', 'Grain Pattern', 'Bookmatched', 'In Application'],
+      kitchenImage: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1600&q=80',
+      kitchenApps: ['Feature island', 'Display cabinets', 'Wall paneling'],
+      spec: { thickness: '0.5 mm face / 18 mm panel', grade: 'A-Grade Natural Teak', glue: 'PVAC + Cold Press', warranty: '12 years', moisture: '8% ± 2%' }
+    },
+    {
+      id: 'prelam-mdf',
+      name: 'Pre-Laminated MDF',
+      tagline: 'HDF core · melamine face',
+      price: 120,
+      grade: 'E1 / E2',
+      image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&q=80',
+      gallery: [
+        'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1000&q=80',
+        'https://images.unsplash.com/photo-1503602642458-232111445657?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604537529428-15bcbe5c8e97?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604176352427-9e8c3a3a5b85?w=1000&q=80'
+      ],
+      galleryLabels: ['Laminate Face', 'Color Range', 'Edge Profile', 'Stack View'],
+      kitchenImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80',
+      kitchenApps: ['Shutter fronts', 'Drawer bottoms', 'Back panels'],
+      spec: { thickness: '8, 12, 18, 25 mm', grade: 'E1 HDF Core', glue: 'Melamine Resin', warranty: '5 years', moisture: '9% ± 2%' }
+    },
+    {
+      id: 'blockboard',
+      name: 'Solid Blockboard',
+      tagline: 'Solid timber core · 19mm',
+      price: 220,
+      grade: 'ISI 1659',
+      image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
+      gallery: [
+        'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604537529428-15bcbe5c8e97?w=1000&q=80',
+        'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1000&q=80',
+        'https://images.unsplash.com/photo-1604176352427-9e8c3a3a5b85?w=1000&q=80'
+      ],
+      galleryLabels: ['Face Veneer', 'Solid Core', 'Edge Detail', 'In Stack'],
+      kitchenImage: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=1600&q=80',
+      kitchenApps: ['Shelves & racks', 'Door shutters', 'Table tops'],
+      spec: { thickness: '19, 25 mm', grade: 'ISI 1659', glue: 'Urea Formaldehyde', warranty: '10 years', moisture: '10% ± 2%' }
+    }
+  ];
+
+  // Load products (localStorage will be used by admin module)
+  function loadProducts() {
+    try {
+      const stored = localStorage.getItem('vw_products');
+      if (stored) return JSON.parse(stored);
+    } catch(e) {}
+    return defaultProducts;
+  }
+  let products = loadProducts();
+  let currentProduct = null;
+  let cartCount = 0;
+
+  // ============ Render Products Grid (Home) ============
+  function renderProductsGrid() {
+    const grid = document.getElementById('products-grid');
+    if (!grid) return;
+    if (products.length === 0) {
+      grid.innerHTML = `<div class="col-span-full text-center py-16 text-[#5c3d24]">
+        <i class="fa-regular fa-folder-open text-4xl text-[#c8821e] mb-4"></i>
+        <p>No products available yet. Please check back soon.</p>
+      </div>`;
+      return;
+    }
+    grid.innerHTML = products.map((p, i) => `
+      <article class="product-card reveal" onclick="openInventory('${p.id}')" style="transition-delay:${i*60}ms">
+        <div class="img-wrap aspect-[4/5] rounded-2xl bg-[#efe6d4]">
+          <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}/800/1000'">
+          ${p.badge ? `<span class="badge absolute top-4 left-4">${p.badge}</span>` : ''}
+          <div class="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-[#f7f1e7] flex items-center justify-center card-arrow text-[#3d2817] shadow-md">
+            <i class="fa-solid fa-arrow-right text-sm"></i>
+          </div>
+        </div>
+        <div class="pt-5 px-1">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[11px] tracking-[0.15em] uppercase text-[#5c3d24] font-medium">${p.grade}</span>
+            <span class="text-xs text-[#5c3d24]"><i class="fa-solid fa-star text-[#c8821e] mr-1"></i>4.9</span>
+          </div>
+          <h3 class="font-display font-semibold text-2xl text-[#3d2817] mb-1">${p.name}</h3>
+          <p class="text-sm text-[#5c3d24] mb-3">${p.tagline}</p>
+          <div class="flex items-end justify-between">
+            <div>
+              <span class="text-xs text-[#5c3d24]">from </span>
+              <span class="font-display font-bold text-xl text-[#3d2817]">₹${p.price}</span>
+              <span class="text-xs text-[#5c3d24]">/sqft</span>
+            </div>
+            <span class="text-xs text-[#c8821e] font-semibold">View Details →</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  }
+
+  // ============ Inventory View ============
+  function openInventory(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    currentProduct = p;
+
+    const view = document.getElementById('inventory-view');
+    view.innerHTML = `
+      <!-- Sticky back bar -->
+      <div class="border-b border-[#3d2817]/10 bg-[#f7f1e7]/92 backdrop-blur-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <button onclick="goHome(event)" class="flex items-center gap-2 text-sm font-medium text-[#3d2817] hover:text-[#c8821e] transition">
+            <i class="fa-solid fa-arrow-left"></i> Back to Collection
+          </button>
+          <div class="text-xs text-[#5c3d24] hidden sm:block">
+            <a href="#" onclick="goHome(event)" class="hover:text-[#c8821e]">Home</a>
+            <span class="mx-2 opacity-50">/</span>
+            <span class="text-[#3d2817]">${p.name}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Top: Gallery + Info -->
+        <div class="grid lg:grid-cols-2 gap-12 mb-20">
+          <!-- Gallery -->
+          <div>
+            <div class="main-img-wrap aspect-square rounded-2xl overflow-hidden bg-[#efe6d4] mb-4 relative">
+              <img id="main-img" src="${p.gallery[0]}" alt="${p.name}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}-g0/1000/1000'">
+              <span class="badge absolute top-4 left-4" id="main-img-label">${p.galleryLabels[0]}</span>
+            </div>
+            <div class="grid grid-cols-4 gap-3">
+              ${p.gallery.map((img, i) => `
+                <button class="thumb aspect-square rounded-xl overflow-hidden ${i === 0 ? 'active' : ''}" onclick="changeMainImage(this, '${img}', '${p.galleryLabels[i]}', '${p.id}-${i}')">
+                  <img src="${img}" alt="${p.galleryLabels[i]}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}-g${i}/300/300'">
+                </button>
+              `).join('')}
+            </div>
+            <div class="mt-5 text-xs text-[#5c3d24] flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-[#c8821e]"></i>
+              ISI certified · Tamper-evident packaging · Free sample on request
+            </div>
+          </div>
+
+          <!-- Info -->
+          <div>
+            <div class="ornament mb-5"><span class="ornament-line"></span>${p.grade}</div>
+            <h1 class="font-display font-bold text-4xl md:text-5xl text-[#3d2817] leading-tight mb-2">${p.name}</h1>
+            <p class="text-lg text-[#5c3d24] mb-7">${p.tagline}</p>
+            <div class="flex items-baseline gap-3 mb-2">
+              <span class="font-display font-bold text-4xl text-[#3d2817]">₹${p.price}</span>
+              <span class="text-sm text-[#5c3d24]">per sq.ft · ex-yard</span>
+            </div>
+            <div class="text-xs text-[#5c3d24] mb-8">GST extra · Min order 50 sq.ft</div>
+
+            <div class="bg-white rounded-2xl p-6 border border-[#3d2817]/8 mb-7">
+              <h3 class="font-display font-semibold text-lg text-[#3d2817] mb-3">Specifications</h3>
+              <div>
+                <div class="spec-row"><span class="text-sm text-[#5c3d24]">Thickness</span><span class="text-sm font-semibold text-[#3d2817]">${p.spec.thickness}</span></div>
+                <div class="spec-row"><span class="text-sm text-[#5c3d24]">Grade</span><span class="text-sm font-semibold text-[#3d2817]">${p.spec.grade}</span></div>
+                <div class="spec-row"><span class="text-sm text-[#5c3d24]">Adhesive</span><span class="text-sm font-semibold text-[#3d2817]">${p.spec.glue}</span></div>
+                <div class="spec-row"><span class="text-sm text-[#5c3d24]">Moisture</span><span class="text-sm font-semibold text-[#3d2817]">${p.spec.moisture}</span></div>
+                <div class="spec-row"><span class="text-sm text-[#5c3d24]">Warranty</span><span class="text-sm font-semibold text-[#c8821e]">${p.spec.warranty}</span></div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 mb-5">
+              <div class="flex items-center border border-[#3d2817]/20 rounded-full overflow-hidden">
+                <button onclick="adjustQty(-10)" class="w-10 h-12 hover:bg-[#efe6d4] text-[#3d2817] transition"><i class="fa-solid fa-minus text-xs"></i></button>
+                <input id="qty-input" type="text" value="50" class="w-14 text-center text-sm font-semibold text-[#3d2817] bg-transparent border-none focus:outline-none">
+                <button onclick="adjustQty(10)" class="w-10 h-12 hover:bg-[#efe6d4] text-[#3d2817] transition"><i class="fa-solid fa-plus text-xs"></i></button>
+              </div>
+              <span class="text-xs text-[#5c3d24]">sq.ft</span>
+              <div class="ml-auto font-display font-bold text-xl text-[#3d2817]" id="total-price">₹${50 * p.price}</div>
+            </div>
+
+            <div class="flex gap-3 mb-5">
+              <button onclick="addToCart()" class="btn-primary flex-1 py-4 rounded-full text-sm font-semibold justify-center">
+                <i class="fa-solid fa-bag-shopping text-xs"></i> Add to Cart
+              </button>
+              <button class="w-14 h-14 rounded-full border border-[#3d2817]/30 hover:bg-[#3d2817] hover:text-[#f7f1e7] transition text-[#3d2817] flex items-center justify-center" aria-label="Save">
+                <i class="fa-regular fa-heart"></i>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 pt-7 border-t border-[#3d2817]/10">
+              <div class="text-center">
+                <i class="fa-solid fa-truck text-[#c8821e] text-lg mb-1"></i>
+                <div class="text-[11px] text-[#5c3d24]">Free delivery<br>over ₹25k</div>
+              </div>
+              <div class="text-center">
+                <i class="fa-solid fa-rotate-left text-[#c8821e] text-lg mb-1"></i>
+                <div class="text-[11px] text-[#5c3d24]">7-day easy<br>returns</div>
+              </div>
+              <div class="text-center">
+                <i class="fa-solid fa-certificate text-[#c8821e] text-lg mb-1"></i>
+                <div class="text-[11px] text-[#5c3d24]">ISI certified<br>${p.spec.warranty} warranty</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kitchen Visualization -->
+        <div class="mb-20">
+          <div class="text-center mb-10">
+            <div class="ornament mb-4 justify-center"><span class="ornament-line"></span>In The Kitchen<span class="ornament-line"></span></div>
+            <h2 class="font-display font-bold text-3xl md:text-5xl text-[#3d2817] leading-tight">
+              See <em class="italic text-[#c8821e]">${p.name}</em> in a real kitchen
+            </h2>
+            <p class="text-[#5c3d24] mt-3 max-w-xl mx-auto text-sm">Hover the hotspots to see exactly where this material is used.</p>
+          </div>
+
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+            <img src="${p.kitchenImage}" alt="${p.name} in kitchen" class="w-full h-[480px] md:h-[560px] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}-kitchen/1600/900'">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#1a1108]/55 via-transparent to-transparent"></div>
+
+            <div class="kitchen-hotspot" style="top: 38%; left: 22%;">
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <div class="hotspot-tip">${p.kitchenApps[0]}</div>
+            </div>
+            <div class="kitchen-hotspot" style="top: 62%; left: 50%;">
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <div class="hotspot-tip">${p.kitchenApps[1] || 'Built-in unit'}</div>
+            </div>
+            <div class="kitchen-hotspot" style="top: 30%; left: 76%;">
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <div class="hotspot-tip">${p.kitchenApps[2] || 'Feature wall'}</div>
+            </div>
+
+            <div class="absolute bottom-6 left-6 right-6 md:right-auto md:max-w-md bg-[#1a1108]/85 backdrop-blur-md rounded-2xl p-5 text-[#f7f1e7]">
+              <div class="text-[10px] tracking-[0.2em] uppercase text-[#e8b25e] mb-2">Application Note</div>
+              <p class="text-sm leading-relaxed">
+                <span class="font-display font-semibold">${p.name}</span> brings warmth and durability to high-use surfaces. The face veneer ages gracefully — every panel develops a unique patina over the years.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-5 mt-7">
+            ${p.kitchenApps.map((app, i) => `
+              <div class="bg-white rounded-2xl p-6 border border-[#3d2817]/8">
+                <div class="font-display text-3xl text-[#c8821e] font-bold mb-2">0${i+1}</div>
+                <div class="font-display font-semibold text-lg text-[#3d2817] mb-2">${app}</div>
+                <p class="text-sm text-[#5c3d24] leading-relaxed">Precision-cut panels for seamless joinery. Edges sealed with PVC tape for moisture protection.</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Related Products -->
+        <div>
+          <div class="flex items-end justify-between mb-8">
+            <h2 class="font-display font-bold text-3xl text-[#3d2817]">Continue browsing</h2>
+            <button onclick="goHome(event)" class="text-sm font-semibold text-[#c8821e] hover:underline">View all →</button>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+            ${products.filter(x => x.id !== p.id).slice(0,4).map(rp => `
+              <div class="product-card" onclick="openInventory('${rp.id}')">
+                <div class="img-wrap aspect-square rounded-xl bg-[#efe6d4]">
+                  <img src="${rp.image}" alt="${rp.name}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${rp.id}-r/600/600'">
+                </div>
+                <div class="pt-3">
+                  <div class="text-[10px] uppercase tracking-wider text-[#5c3d24]">${rp.grade}</div>
+                  <div class="font-display font-semibold text-base text-[#3d2817] mt-1">${rp.name}</div>
+                  <div class="text-sm text-[#c8821e] font-semibold mt-1">₹${rp.price}/sqft</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('home-view').classList.add('hidden-view');
+    view.classList.remove('hidden-view');
+    window.scrollTo({top: 0, behavior: 'instant'});
+  }
+
+  function goHome(e) {
+    if (e) e.preventDefault();
+    document.getElementById('inventory-view').classList.add('hidden-view');
+    document.getElementById('home-view').classList.remove('hidden-view');
+    window.scrollTo({top: 0, behavior: 'instant'});
+    // Refresh grid (in case admin updated products)
+    products = loadProducts();
+    renderProductsGrid();
+  }
+
+  function changeMainImage(el, src, label, seedFallback) {
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const main = document.getElementById('main-img');
+    main.style.opacity = 0;
+    setTimeout(() => {
+      main.src = src;
+      main.onerror = function(){ this.onerror=null; this.src='https://picsum.photos/seed/'+seedFallback+'/1000/1000'; };
+      main.style.opacity = 1;
+    }, 200);
+    const labelEl = document.getElementById('main-img-label');
+    if (labelEl) labelEl.textContent = label;
+  }
+
+  function adjustQty(delta) {
+    const input = document.getElementById('qty-input');
+    if (!input || !currentProduct) return;
+    let v = parseInt(input.value) + delta;
+    if (v < 50) v = 50;
+    input.value = v;
+    document.getElementById('total-price').textContent = '₹' + (v * currentProduct.price);
+  }
+
+  function addToCart() {
+    cartCount++;
+    document.getElementById('cart-count').textContent = cartCount;
+    showToast(`${currentProduct.name} added to cart`);
+  }
+
+  function showToast(text) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = text;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  // Reveal observer
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  // Init
+  document.addEventListener('DOMContentLoaded', () => {
+    renderProductsGrid();
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  });
+</script>
+</body>
+</html>
